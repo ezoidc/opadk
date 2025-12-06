@@ -1,0 +1,37 @@
+[project]
+name = "opadk"
+version = "0.1.1"
+description = "Plugin for Agent Development Kit (ADK) that integrates with Open Policy Agent (OPA) to enforce policies on agents and tools."
+readme = "README.md"
+authors = [
+    { name = "becojo", email = "opadk@ezoidc.dev" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "aiohttp>=3.13.2",
+    "google-adk>=1.19.0",
+    "pydantic>=2.12.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/ezoidc/opadk"
+Issues = "https://github.com/ezoidc/opadk/issues"
+
+
+[build-system]
+requires = ["uv_build>=0.8.0,<0.9"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.8",
+    "ty>=0.0.1a32",
+]
+
+[tool.uv.workspace]
+members = [
+    "examples/denylist",
+]
+
+[tool.ruff.lint]
+select = ["I", "F401"]
