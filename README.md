@@ -18,30 +18,6 @@ runner = Runner(
 )
 ```
 
-#### Custom Headers
-
-You can provide custom headers to the remote OPA client, which is useful for authentication or passing additional metadata:
-
-```python
-from google.adk.runners import Runner
-from opadk import OPADKPlugin, OPARemoteClient
-
-runner = Runner(
-    # ...
-    plugins=[
-        OPADKPlugin(
-            opa_client=OPARemoteClient(
-                server_url="http://localhost:8181",
-                headers={
-                    "Authorization": "Bearer your-token-here",
-                    "X-Custom-Header": "custom-value"
-                }
-            )
-        )
-    ],
-)
-```
-
 ### Local client
 
 If `opa` is installed locally, the `OPARunClient` can be used to evaluate policies without needing a separate OPA server. The client must be provided with the path to a folder with Rego policies.
