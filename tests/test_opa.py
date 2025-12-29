@@ -85,7 +85,10 @@ class TestOPA(unittest.IsolatedAsyncioTestCase):
         client = OPARemoteClient(
             server_url="http://127.0.0.1:8182",
             namespace=["adk", "testing"],
-            headers={"Authorization": "Bearer test-token", "X-Custom-Header": "test-value"},
+            headers={
+                "Authorization": "Bearer test-token",
+                "X-Custom-Header": "test-value",
+            },
         )
 
         # Verify client works with headers - just test one case to verify functionality
