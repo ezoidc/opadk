@@ -4,7 +4,7 @@ import subprocess
 from typing import Any, Literal
 
 import aiohttp
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .models import OPADKResponse
 
@@ -23,7 +23,7 @@ class OPARemoteClient(OPABaseClient):
 
     server_url: str
     namespace: list[str] = ["adk"]
-    headers: dict[str, str] = {}
+    headers: dict[str, str] = Field(default_factory=dict)
 
     async def is_allowed(self, scope: Scope, input: dict[str, Any]) -> OPADKResponse:
         async with aiohttp.ClientSession(base_url=self.server_url) as session:
