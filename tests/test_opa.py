@@ -62,3 +62,39 @@ class TestOPA(unittest.IsolatedAsyncioTestCase):
 
         proc.terminate()
         await proc.wait()
+
+    async def test_opa_remote_client_with_headers(self):
+        proc = await asyncio.create_subprocess_exec(
+            "opa",
+            "run",
+            "--server",
+            "--addr",
+            "127.0.0.1:8182",
+            "--bundle",
+            "tests/testdata/rego",
+            stderr=asyncio.subprocess.PIPE,
+        )
+        if proc.returncode is not None:
+            raise RuntimeError("Failed to start OPA server for testing.")
+
+        assert proc.stderr is not None
+        await proc.stderr.readline()
+        await asyncio.sleep(0.1)  # Give OPA server time to start
+
+        # Test that client can be created with custom headers
+        client = OPARemoteClient(
+            server_url="http://127.0.0.1:8182",
+            namespace=["adk", "testing"],
+            headers={"Authorization": "Bearer test-token", "X-Custom-Header": "test-value"},
+        )
+
+        # Verify client works with headers - just test one case to verify functionality
+        outcome = await client.is_allowed(
+            scope="tool",
+            input={"state": {"tool_allowed": True}},
+        )
+        self.assertEqual(outcome.allow, True)
+        self.assertEqual(outcome.deny.reasons, [])
+
+        proc.terminate()
+        await proc.wait()

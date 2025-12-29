@@ -23,6 +23,7 @@ class OPARemoteClient(OPABaseClient):
 
     server_url: str
     namespace: list[str] = ["adk"]
+    headers: dict[str, str] = {}
 
     async def is_allowed(self, scope: Scope, input: dict[str, Any]) -> OPADKResponse:
         async with aiohttp.ClientSession(base_url=self.server_url) as session:
@@ -30,6 +31,7 @@ class OPARemoteClient(OPABaseClient):
             async with session.post(
                 url,
                 json={"input": input},
+                headers=self.headers,
             ) as response:
                 json = await response.json()
                 return OPADKResponse.model_validate(json.get("result"))
